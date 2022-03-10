@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Public\Images;
 
 class BlogController extends Controller
 {
@@ -101,7 +102,9 @@ class BlogController extends Controller
     public function destroy($id)
     {
         //
-        $data = Blog::findorFail($id);
+        $data = Blog::find($id);
+        $image_path = 'Images/' . $data->image_path;
+        unlink($image_path);
         $result = $data->delete();
         if ($result) {
             return true;
