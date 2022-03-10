@@ -28,25 +28,24 @@ class BlogController extends Controller
     {
         //
         $request->validate([
-            'title'=>'required|string',
-            'description'=>'required|string',
-            'detail'=>'required|string',
-            'image'=>'required|mimes:png,jpg,jpeg'
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'detail' => 'required|string',
+            'image' => 'required|mimes:png,jpg,jpeg'
         ]);
 
-        $imageName=time().'_'.$request->title.'.'.$request->image->extension();
+        $imageName = time() . '_' . $request->title . '.' . $request->image->extension();
 
         $request->image->move(public_path('Images'), $imageName);
 
         $data = Blog::create([
-            'title'=>$request->get('title'),
-            'description'=>$request->get('description'),
-            'detail'=>$request->get('detail'),
-            'image_path'=> $imageName
+            'title' => $request->get('title'),
+            'description' => $request->get('description'),
+            'detail' => $request->get('detail'),
+            'image_path' => $imageName
         ]);
 
         return $data;
-
     }
 
     /**
@@ -71,27 +70,26 @@ class BlogController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $data =Blog::find($id);
+        $data = Blog::find($id);
         $request->validate([
-            'title'=>'required|string',
-            'description'=>'required|string',
-            'detail'=>'required|string',
-            'image'=>'mimes:png,jpg,jpeg'
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'detail' => 'required|string',
+            'image' => 'mimes:png,jpg,jpeg'
         ]);
 
-        // $imageName=time().'_'.$request->title.'.'.$request->image->extension();
+        $imageName = time() . '_' . $request->title . '.' . $request->image->extension();
 
-        // $request->image->move(public_path('Images'), $imageName);
+        $request->image->move(public_path('Images'), $imageName);
 
         $data->update([
-            'title'=>$request->get('title'),
-            'description'=>$request->get('description'),
-            'detail'=>$request->get('detail'),
-            //'image_path'=> $imageName
+            'title' => $request->get('title'),
+            'description' => $request->get('description'),
+            'detail' => $request->get('detail'),
+            'image_path' => $imageName
         ]);
 
         return $data;
-
     }
 
     /**
@@ -103,5 +101,12 @@ class BlogController extends Controller
     public function destroy($id)
     {
         //
+        $data = Blog::findorFail($id);
+        $result = $data->delete();
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
